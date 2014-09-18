@@ -1,7 +1,7 @@
 module Debitcredit
   class Item < ActiveRecord::Base
-    belongs_to :transaction
-    belongs_to :account
+    belongs_to :transaction, class_name: "Debitcredit::Transaction", foreign_key: "transaction_id"
+    belongs_to :account, class_name: "Debitcredit::Account", foreign_key: "account_id"
 
     validate :transaction, :account, presence: true
     validate :amount, numericality: true, greater_than_or_equal_to: 0
