@@ -5,6 +5,8 @@ module Debitcredit
 
     validate :transaction, :account, presence: true
     validate :amount, numericality: true, greater_than_or_equal_to: 0
+    
+    attr_accessor :account_type, :user_account_id
 
     scope :debit, ->{where(debit: true)}
     scope :credit, ->{where(debit: false)}
