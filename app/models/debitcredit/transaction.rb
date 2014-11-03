@@ -38,7 +38,7 @@ module Debitcredit
     end
 
     def items_balance
-      items.map(&:value_for_balance).sum
+      items.map(&:value_for_balance).map(&:to_f).sum
     end
 
     def balanced?
