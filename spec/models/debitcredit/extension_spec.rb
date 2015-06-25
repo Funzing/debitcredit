@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module Debitcredit
   describe Extension do
-    describe :has_accounts do
+    describe 'has_accounts' do
       it 'should define methods that create accounts' do
         acc = @john.accounts.cash
         expect(acc.class).to eq AssetAccount
@@ -14,13 +14,13 @@ module Debitcredit
       end
     end
 
-    describe :has_transactions do
+    describe 'has_entries' do
       it 'should define []' do
-        expect(@john.transactions[:purchase]).to eq @laptop_purchase
+        expect(@john.entries[:purchase]).to eq @laptop_purchase
       end
 
       it 'should allow defining methods' do
-        expect(@john.transactions.transactions_method).to eq :ok
+        expect(@john.entries.entries_method).to eq :ok
       end
     end
   end

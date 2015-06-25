@@ -1,12 +1,12 @@
 require 'docile'
 module Debitcredit
-  class Transaction < ActiveRecord::Base
+  class Entry < ActiveRecord::Base
     belongs_to :reference, polymorphic: true
-    belongs_to :parent_transaction, class_name: 'Debitcredit::Transaction'
-    belongs_to :inverse_transaction, class_name: 'Debitcredit::Transaction'
-    has_many :items, class_name: 'Debitcredit::Item', dependent: :destroy, autosave: true
-    has_many :child_transactions, class_name: 'Debitcredit::Transaction', foreign_key: 'parent_transaction_id'
-    
+    belongs_to :parent_entry, class_name: 'Debitcredit::Entry'
+    has_many :child_entries, class_name: 'Debitcredit::Entry', foreign_key: 'parent_entry_id'
+    belongs_to :inverse_entry, class_name: 'Debitcredit::Entry'
+    has_many :items, dependent: :destroy, autosave: true, inverse_of: :entry
+
     accepts_nested_attributes_for :items, reject_if: :all_blank, allow_destroy: true
 
     validates :reference, :description, presence: true
@@ -32,8 +32,8 @@ module Debitcredit
         res.description ||= "reverse of tr ##{id}: #{description}"
         res.kind ||= 'rollback'
         res.reference ||= reference
-        res.parent_transaction = self
-        self.inverse_transaction ||= res
+        res.parent_entry = self
+        self.inverse_entry ||= res
       end
     end
 
@@ -58,11 +58,11 @@ module Debitcredit
     end
 
     def save_parent
-      parent_transaction.save! if parent_transaction.try(:inverse_transaction) == self
+      parent_entry.save! if parent_entry.try(:inverse_entry) == self
     end
 
     def parent_not_inversed
-      errors.add(:base, :already_inversed) if parent_transaction.inverse_transaction_id
+      errors.add(:base, :already_inversed) if parent_entry.inverse_entry_id
     end
   end
 end

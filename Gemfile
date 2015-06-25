@@ -1,5 +1,4 @@
 source "https://rubygems.org"
-ruby '2.0.0'
 
 # Declare your gem's dependencies in debitcredit.gemspec.
 # Bundler will treat runtime dependencies like base dependencies, and
