@@ -1,9 +1,9 @@
 module Debitcredit
   class Item < ActiveRecord::Base
-    belongs_to :transaction, class_name: "Debitcredit::Transaction", foreign_key: "transaction_id"
+    belongs_to :debitcredit_transaction, class_name: "Debitcredit::Transaction", foreign_key: "transaction_id"
     belongs_to :account, class_name: "Debitcredit::Account", foreign_key: "account_id"
 
-    validate :transaction, :account, presence: true
+    validate :debitcredit_transaction, :account, presence: true
     validate :amount, numericality: true, greater_than_or_equal_to: 0
     
     attr_accessor :account_type, :user_account_id, :expires_at_date, :expires_at_time
@@ -24,7 +24,7 @@ module Debitcredit
     end
 
     def inverse
-      self.class.new account: account, transaction: transaction, amount: amount, debit: credit?
+      self.class.new account: account, debitcredit_transaction: debitcredit_transaction, amount: amount, debit: credit?
     end
   end
 end
