@@ -20,6 +20,10 @@ class Debitcredit::Entry::Dsl
   end
   alias ref reference
 
+  def parent(parent_entry)
+    @entry.parent_entry_id = parent_entry.id
+  end
+
   def debit(account, amount, comment = nil)
     build_item true, account, amount, comment
   end
