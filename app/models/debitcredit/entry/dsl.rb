@@ -21,7 +21,7 @@ class Debitcredit::Entry::Dsl
   alias ref reference
 
   def parent(parent_entry)
-    @entry.parent_entry_id = parent_entry.id
+    @entry.parent_entry_id = parent_entry.try(:id)
   end
 
   def debit(account, amount, comment = nil)
